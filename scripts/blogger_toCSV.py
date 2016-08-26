@@ -7,6 +7,8 @@ infile = open('../data/parsed.json', 'r')
 
 csvwriter = unicodecsv.writer(outfile)
 
+outfile.close()
+
 csvwriter.writerow(['id', 'parent_id', 'author', 'date', 'title', 'content'])
 
 for line in infile:
