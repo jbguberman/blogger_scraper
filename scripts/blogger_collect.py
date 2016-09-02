@@ -16,9 +16,24 @@ from configparser import SafeConfigParser
 config = SafeConfigParser()
 config.read('../settings.cfg')
 API_KEY = config.get('keys', 'api_key')
-BLOG_ID = config.get('keys', 'blog_id')
+BLOG_URL = config.get('keys', 'blog_url')
+BLOG_URL = '{}{}'.format('https%3A%2F%2F', BLOG_URL)
+# print(BLOG_URL)
+# BLOG_URL = urlib2.quote_plus('https://googleblog.blogspot.com/')
 MAX_POSTS = config.get('settings', 'max_posts')
 MAX_COMMENTS = config.get('settings', 'max_comments')
+
+# parameters passed to the GET request used to get the blog's ID
+first_payload = {'key': API_KEY}
+
+# a hacky way to do this, but it works for now
+r = requests.get('https://www.googleapis.com/blogger/v3/blogs/byurl?url={}%2F&key={}'
+                 .format(BLOG_URL, API_KEY))
+
+json_getID = r.json()
+BLOG_ID = json_getID['id']
+
+print(BLOG_ID)
 
 # parameters to be passed to the GET request for posts
 posts_payload = {'maxResults': MAX_POSTS, 'key': API_KEY}
